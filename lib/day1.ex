@@ -53,4 +53,14 @@ defmodule Day1 do
 
     Enum.sum(hit_counts)
   end
+
+  def calculate_similarity_score_of_lists3(list1, list2) do
+    {_, hit_counts} =
+      Enum.map_reduce(list1, 0, fn number, acc ->
+        hits = calculate_hit_count(list2, number)
+        {0, acc + (hits * number)}
+      end)
+
+    hit_counts
+  end
 end
