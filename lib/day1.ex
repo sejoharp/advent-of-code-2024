@@ -38,4 +38,19 @@ defmodule Day1 do
     hits = Enum.filter(list2, fn x -> x == head end)
     calculate_similarity_score_of_lists(tail, list2, aggregator + head * length(hits))
   end
+
+  def calculate_hit_count(list, number) do
+    hits = Enum.filter(list, fn x -> x == number end)
+    length(hits)
+  end
+
+  def calculate_similarity_score_of_lists2(list1, list2) do
+    hit_counts =
+      Enum.map(list1, fn number ->
+        hits = calculate_hit_count(list2, number)
+        hits * number
+      end)
+
+    Enum.sum(hit_counts)
+  end
 end

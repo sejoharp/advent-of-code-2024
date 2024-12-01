@@ -4034,6 +4034,6 @@ defmodule Day1Test do
       11247
     ]
 
-    assert Day1.calculate_similarity_score_of_lists(first_list, second_list) == 23_387_399
+    assert Day1.calculate_similarity_score_of_lists2(first_list, second_list) == 23_387_399
   end
 end
