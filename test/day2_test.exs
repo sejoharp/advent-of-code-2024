@@ -37,10 +37,6 @@ defmodule Day2Test do
     assert Day2.is_safe?([1, 3, 6, 7, 9]) == :safe
   end
 
-  test "remove new line and convert string to number" do
-    assert Day2.convert_string_to_number("2") == 2
-  end
-
   test "counts safe lists" do
     test_input = [
       [7, 6, 4, 2, 1],

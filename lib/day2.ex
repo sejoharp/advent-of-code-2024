@@ -1,12 +1,9 @@
 defmodule Day2 do
   @moduledoc false
 
-  def convert_string_to_number(string_value) do
-    String.to_integer(string_value)
-  end
-
   def read_input do
     input_path = "lib/day2_input.txt"
+
     case File.open(input_path, [:read]) do
       {:ok, file} ->
         lines =
@@ -16,7 +13,7 @@ defmodule Day2 do
             line
             |> (fn line -> String.replace(line, "\n", "") end).()
             |> (fn line -> String.split(line, " ") end).()
-            |> Enum.map(fn string_numbers -> convert_string_to_number(string_numbers) end)
+            |> Enum.map(fn string_numbers -> String.to_integer(string_numbers) end)
           end)
 
         File.close(file)
