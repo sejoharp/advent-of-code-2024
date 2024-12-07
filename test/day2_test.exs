@@ -51,7 +51,46 @@ defmodule Day2Test do
   end
 
   test "solves day two part 1" do
-    test_input = Day2.read_input()
+    test_input = Day2.read_input("lib/day2_input.txt")
     assert Day2.count_safe_lists(test_input) == 306
+  end
+
+  test "detects list is safe with one outlier" do
+    assert Day2.forward_to_sorting_checker([7, 6, 4, 2, 1]) == :safe
+    assert Day2.forward_to_sorting_checker([1, 2, 7, 8, 9]) == :unsafe
+    assert Day2.forward_to_sorting_checker([9, 7, 6, 2, 1]) == :unsafe
+    assert Day2.forward_to_sorting_checker([1, 3, 2, 4, 5]) == :safe
+
+    assert Day2.forward_to_sorting_checker([8, 6, 4, 4, 1]) == :safe
+    assert Day2.forward_to_sorting_checker([1, 3, 6, 7, 9]) == :safe
+    assert Day2.forward_to_sorting_checker([3, 3, 6, 7, 9]) == :safe
+    assert Day2.forward_to_sorting_checker([6, 6, 5, 3, 1]) == :safe
+
+    assert Day2.forward_to_sorting_checker([6, 8, 5, 3, 1]) == :unsafe
+    assert Day2.forward_to_sorting_checker([1, 0, 2, 4, 5]) == :unsafe
+
+    assert Day2.forward_to_sorting_checker([95,95,93,87,86]) == :unsafe
+    assert Day2.forward_to_sorting_checker([15,15,14,13,12,6,8]) == :unsafe
+
+    assert Day2.forward_to_sorting_checker([3, 3, 3, 6, 7]) == :unsafe
+    assert Day2.forward_to_sorting_checker([3, 3, 3, 2, 1]) == :unsafe
+  end
+
+  test "counts safe lists with outlier" do
+    test_input = [
+      [7, 6, 4, 2, 1],
+      [1, 2, 7, 8, 9],
+      [9, 7, 6, 2, 1],
+      [1, 3, 2, 4, 5],
+      [8, 6, 4, 4, 1],
+      [1, 3, 6, 7, 9]
+    ]
+
+    assert Day2.count_safes(test_input) == 4
+  end
+
+  test "solves day two part 2" do
+    test_input = Day2.read_input("lib/day2_input.txt")
+    assert Day2.count_safes(test_input) == 346
   end
 end
