@@ -26,12 +26,12 @@ defmodule Day2Test do
  end
 
  test "detects list is safe" do
-   assert Day2.is_safe?([7, 6, 4, 2, 1]) == true
-   assert Day2.is_safe?([1, 2, 7, 8, 9]) == false
-   assert Day2.is_safe?([9, 7, 6, 2, 1]) == false
-   assert Day2.is_safe?([1, 3, 2, 4, 5]) == false
-   assert Day2.is_safe?([8, 6, 4, 4, 1]) == false
-   assert Day2.is_safe?([1, 3, 6, 7, 9]) == true
+   assert Day2.safe?([7, 6, 4, 2, 1]) == true
+   assert Day2.safe?([1, 2, 7, 8, 9]) == false
+   assert Day2.safe?([9, 7, 6, 2, 1]) == false
+   assert Day2.safe?([1, 3, 2, 4, 5]) == false
+   assert Day2.safe?([8, 6, 4, 4, 1]) == false
+   assert Day2.safe?([1, 3, 6, 7, 9]) == true
  end
 
  test "counts safe lists" do

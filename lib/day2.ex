@@ -62,14 +62,14 @@ defmodule Day2 do
     :unsafe
   end
 
-  def is_safe?(numbers) do
+  def safe?(numbers) do
     sorting = detect_sorting(numbers)
     detect_state(numbers, sorting) == :safe
   end
 
   def count_safe_lists(number_lists) do
     safe_lists =
-      Enum.filter(number_lists, fn number_list -> is_safe?(number_list) end)
+      Enum.filter(number_lists, fn number_list -> safe?(number_list) end)
 
     length(safe_lists)
   end
@@ -128,7 +128,7 @@ defmodule Day2 do
     end
   end
 
-  def is_safe_with_outlier?(numbers) do
+  def safe_with_outlier?(numbers) do
     sorting = detect_sorting(numbers)
     detect_state_with_one_outlier(numbers, 0, sorting)
   end
@@ -136,44 +136,44 @@ defmodule Day2 do
   def count_safe_with_outlier_lists(number_lists) do
     safe_lists =
       Enum.filter(number_lists, fn number_list ->
-        is_safe_with_outlier?(number_list) == :safe
+        safe_with_outlier?(number_list) == :safe
       end)
 
     length(safe_lists)
   end
 
-  def is_safe_increase_level?(numbers) do
-    is_safe_increase_level?(numbers, :ok)
+  def safe_increase_level?(numbers) do
+    safe_increase_level?(numbers, :ok)
   end
 
-  def is_safe_increase_level?(numbers, state) do
+  def safe_increase_level?(numbers, state) do
     if length(numbers) == 1 do
       :safe
     else
       [first, second | tail] = numbers
 
       cond do
-        valid_increase?(first, second) -> is_safe_increase_level?([second | tail], state)
+        valid_increase?(first, second) -> safe_increase_level?([second | tail], state)
         state == :outliner -> :unsafe
-        true -> is_safe_increase_level?([first | tail], :outliner)
+        true -> safe_increase_level?([first | tail], :outliner)
       end
     end
   end
 
-  def is_safe_decrease_level?(numbers) do
-    is_safe_decrease_level?(numbers, :ok)
+  def safe_decrease_level?(numbers) do
+    safe_decrease_level?(numbers, :ok)
   end
 
-  def is_safe_decrease_level?(numbers, state) do
+  def safe_decrease_level?(numbers, state) do
     if length(numbers) == 1 do
       :safe
     else
       [first, second | tail] = numbers
 
       cond do
-        valid_decrease?(first, second) -> is_safe_decrease_level?([second | tail], state)
+        valid_decrease?(first, second) -> safe_decrease_level?([second | tail], state)
         state == :outliner -> :unsafe
-        true -> is_safe_decrease_level?([first | tail], :outliner)
+        true -> safe_decrease_level?([first | tail], :outliner)
       end
     end
   end
@@ -196,10 +196,10 @@ defmodule Day2 do
           :unsafe
 
         first < second ->
-          is_safe_increase_level?(numbers, state)
+          safe_increase_level?(numbers, state)
 
         first > second ->
-          is_safe_decrease_level?(numbers, state)
+          safe_decrease_level?(numbers, state)
       end
     end
   end
@@ -228,12 +228,12 @@ defmodule Day2 do
     end
   end
 
-  def is_decreasing?([first, second | _numbers]) do
+  def decreasing?([first, second | _numbers]) do
     first > second
   end
 
-  def is_safe_freddy?(numbers) do
-    if(is_decreasing?(numbers)) do
+  def safe_freddy?(numbers) do
+    if decreasing?(numbers) do
       decrease?(numbers)
     else
       increase?(numbers)
@@ -250,13 +250,13 @@ defmodule Day2 do
     #     IO.inspect(List.delete_at(original_report, index), label: "deleted element report:")
     #     IO.inspect(index, label: "index")
     #     IO.inspect(length(report) == index + 1, label: "all tested")
-    #     IO.inspect(is_safe?(report), label: "is_safe?")
+    #     IO.inspect(safe?(report), label: "safe?")
     #     IO.puts("-------")
     cond do
       length(original_report) == index + 1 ->
         false
 
-      is_safe_freddy?(report) ->
+      safe_freddy?(report) ->
         true
 
       true ->
