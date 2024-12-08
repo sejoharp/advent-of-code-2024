@@ -22,7 +22,6 @@ defmodule Day2 do
     end
   end
 
-  @spec detect_sorting(nonempty_maybe_improper_list()) :: :decrease | :equal | :increase
   def detect_sorting([first, second | _numbers]) when first < second do
     :increase
   end
@@ -38,9 +37,11 @@ defmodule Day2 do
   def detect_state([first | numbers], sorting) when sorting == :increase do
     second = List.first(numbers)
 
+    valid_distance = first < second and abs(first - second) in 1..3
+
     cond do
-      second >= first + 1 and second <= first + 3 and length(numbers) == 1 -> :safe
-      second >= first + 1 and second <= first + 3 -> detect_state(numbers, :increase)
+      valid_distance and length(numbers) == 1 -> :safe
+      valid_distance -> detect_state(numbers, :increase)
       true -> :unsafe
     end
   end
@@ -48,9 +49,11 @@ defmodule Day2 do
   def detect_state([first | numbers], sorting) when sorting == :decrease do
     second = List.first(numbers)
 
+    valid_distance = first > second and abs(first - second) in 1..3
+
     cond do
-      second <= first - 1 and second >= first - 3 and length(numbers) == 1 -> :safe
-      second <= first - 1 and second >= first - 3 -> detect_state(numbers, :decrease)
+      valid_distance and length(numbers) == 1 -> :safe
+      valid_distance -> detect_state(numbers, :decrease)
       true -> :unsafe
     end
   end
@@ -61,14 +64,12 @@ defmodule Day2 do
 
   def is_safe?(numbers) do
     sorting = detect_sorting(numbers)
-    detect_state(numbers, sorting)
+    detect_state(numbers, sorting) == :safe
   end
 
   def count_safe_lists(number_lists) do
     safe_lists =
-      Enum.filter(number_lists, fn number_list ->
-        is_safe?(number_list) == :safe
-      end)
+      Enum.filter(number_lists, fn number_list -> is_safe?(number_list) end)
 
     length(safe_lists)
   end
@@ -203,9 +204,69 @@ defmodule Day2 do
     end
   end
 
+  def increase?([first | numbers]) do
+    second = List.first(numbers)
+
+    valid_distance = first < second and abs(first - second) in 1..3
+
+    cond do
+      valid_distance and length(numbers) == 1 -> true
+      valid_distance -> increase?(numbers)
+      true -> false
+    end
+  end
+
+  def decrease?([first | numbers]) do
+    second = List.first(numbers)
+
+    valid_distance = first > second and abs(first - second) in 1..3
+
+    cond do
+      valid_distance and length(numbers) == 1 -> true
+      valid_distance -> decrease?(numbers)
+      true -> false
+    end
+  end
+
+  def is_decreasing?([first, second | _numbers]) do
+    first > second
+  end
+
+  def is_safe_freddy?(numbers) do
+    if(is_decreasing?(numbers)) do
+      decrease?(numbers)
+    else
+      increase?(numbers)
+    end
+  end
+
+  def problem_dampener(report) do
+    problem_dampener(report, report, 0)
+  end
+
+  def problem_dampener(original_report, report, index) do
+    #     IO.inspect(original_report, label: "original report:       ")
+    #     IO.inspect(List.pop_at(original_report, index), label:     "current report:    ")
+    #     IO.inspect(List.delete_at(original_report, index), label: "deleted element report:")
+    #     IO.inspect(index, label: "index")
+    #     IO.inspect(length(report) == index + 1, label: "all tested")
+    #     IO.inspect(is_safe?(report), label: "is_safe?")
+    #     IO.puts("-------")
+    cond do
+      length(original_report) == index + 1 ->
+        false
+
+      is_safe_freddy?(report) ->
+        true
+
+      true ->
+        problem_dampener(original_report, List.delete_at(original_report, index), index + 1)
+    end
+  end
+
   def count_safes(lines) do
-    states = Enum.map(lines, fn line -> forward_to_sorting_checker(line) end)
-    safe_states = Enum.filter(states, fn state -> state == :safe end)
+    states = Enum.map(lines, fn line -> problem_dampener(line) end)
+    safe_states = Enum.filter(states, fn state -> state == true end)
     length(safe_states)
   end
 end
